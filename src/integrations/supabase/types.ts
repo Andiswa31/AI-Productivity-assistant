@@ -14,7 +14,167 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      badges: {
+        Row: {
+          code: string
+          criteria_type: string
+          criteria_value: number
+          description: string
+          icon: string
+          id: string
+          name: string
+        }
+        Insert: {
+          code: string
+          criteria_type: string
+          criteria_value: number
+          description: string
+          icon?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          code?: string
+          criteria_type?: string
+          criteria_value?: number
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      quiz_attempts: {
+        Row: {
+          answers: Json | null
+          completed_at: string | null
+          correct_count: number | null
+          created_at: string
+          difficulty: string
+          duration_seconds: number | null
+          id: string
+          num_questions: number
+          questions: Json
+          status: string
+          topic: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json | null
+          completed_at?: string | null
+          correct_count?: number | null
+          created_at?: string
+          difficulty?: string
+          duration_seconds?: number | null
+          id?: string
+          num_questions: number
+          questions: Json
+          status?: string
+          topic: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json | null
+          completed_at?: string | null
+          correct_count?: number | null
+          created_at?: string
+          difficulty?: string
+          duration_seconds?: number | null
+          id?: string
+          num_questions?: number
+          questions?: Json
+          status?: string
+          topic?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_stats: {
+        Row: {
+          last_quiz_date: string | null
+          longest_streak: number
+          streak_days: number
+          total_correct: number
+          total_questions: number
+          total_quizzes: number
+          updated_at: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          last_quiz_date?: string | null
+          longest_streak?: number
+          streak_days?: number
+          total_correct?: number
+          total_questions?: number
+          total_quizzes?: number
+          updated_at?: string
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          last_quiz_date?: string | null
+          longest_streak?: number
+          streak_days?: number
+          total_correct?: number
+          total_questions?: number
+          total_quizzes?: number
+          updated_at?: string
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
