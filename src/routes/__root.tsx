@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -53,10 +54,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
+            onClick={() => { router.invalidate(); reset(); }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
             Try again
@@ -78,14 +76,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Workplace AI — Productivity Suite" },
+      { title: "QuizAI — AI-Powered Practice Quizzes" },
       {
         name: "description",
         content:
-          "AI Workplace Productivity Assistant: smart email, meeting notes, task planning, research, and chat.",
+          "Generate AI-powered practice quizzes on any topic, learn with an AI tutor, build streaks, and earn badges.",
       },
-      { property: "og:title", content: "Workplace AI — Productivity Suite" },
-      { property: "og:description", content: "Automate workplace tasks with AI." },
+      { property: "og:title", content: "QuizAI — AI-Powered Practice Quizzes" },
+      { property: "og:description", content: "Master any subject with AI-generated quizzes and a built-in tutor." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -121,26 +119,35 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isPublic = pathname === "/" || pathname.startsWith("/auth");
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
-        <div className="flex min-h-screen w-full bg-background">
-          <AppSidebar />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <header className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 border-b bg-card/60 px-3 py-2 backdrop-blur">
-              <SidebarTrigger />
-              <div className="min-w-0 text-sm text-muted-foreground">
-                <span className="truncate">AI-powered workplace productivity</span>
-              </div>
-            </header>
-            <main className="min-w-0 flex-1">
-              <Outlet />
-            </main>
+      {isPublic ? (
+        <>
+          <Outlet />
+          <Toaster richColors position="top-right" />
+        </>
+      ) : (
+        <SidebarProvider>
+          <div className="flex min-h-screen w-full bg-background">
+            <AppSidebar />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <header className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 border-b bg-card/60 px-3 py-2 backdrop-blur">
+                <SidebarTrigger />
+                <div className="min-w-0 text-sm text-muted-foreground">
+                  <span className="truncate">AI-powered learning</span>
+                </div>
+              </header>
+              <main className="min-w-0 flex-1">
+                <Outlet />
+              </main>
+            </div>
           </div>
-        </div>
-        <Toaster richColors position="top-right" />
-      </SidebarProvider>
+          <Toaster richColors position="top-right" />
+        </SidebarProvider>
+      )}
     </QueryClientProvider>
   );
 }
