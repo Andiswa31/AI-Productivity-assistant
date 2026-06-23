@@ -222,11 +222,20 @@ export const getLeaderboard = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("user_stats")
-      .select("user_id, xp, streak_days, total_quizzes, total_correct, total_questions, profiles!inner(display_name, avatar_url)")
+      .select("user_id, xp, streak_days, total_quizzes, total_correct, total_questions")
       .order("xp", { ascending: false })
       .limit(50);
     if (error) throw new Error(error.message);
-    return data ?? [];
+    const rows = data ?? [];
+    const ids = rows.map((r) => r.user_id);
+    const { data: profiles } = ids.length
+      ? await context.supabase
+          .from("profiles")
+          .select("id, display_name, avatar_url")
+          .in("id", ids)
+      : { data: [] as any[] };
+    const map = new Map((profiles ?? []).map((p: any) => [p.id, p]));
+    return rows.map((r) => ({ ...r, profiles: map.get(r.user_id) ?? null }));
   });
 
 // ---- Analytics (weak topics, accuracy over time) ----
