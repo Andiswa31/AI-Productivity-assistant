@@ -1,99 +1,79 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PageHeader } from "@/components/PageHeader";
-import {
-  LayoutDashboard,
-  Mail,
-  FileText,
-  ListChecks,
-  Search,
-  MessageSquare,
-  ArrowRight,
-  ShieldCheck,
-} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Brain, Sparkles, Trophy, BarChart3, Flame, MessageSquare, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Workplace AI" },
-      { name: "description", content: "Your AI workplace productivity dashboard." },
+      { title: "QuizAI — AI-Powered Practice Quizzes" },
+      { name: "description", content: "Generate custom quizzes on any topic, learn with an AI tutor, build streaks, and earn badges." },
+      { property: "og:title", content: "QuizAI — AI-Powered Practice Quizzes" },
+      { property: "og:description", content: "Practice smarter with AI-generated quizzes, instant explanations, streaks, and analytics." },
     ],
   }),
-  component: Dashboard,
+  component: Landing,
 });
 
-const tools = [
-  {
-    title: "Smart Email Generator",
-    description: "Draft professional emails from a short brief.",
-    href: "/email",
-    icon: Mail,
-  },
-  {
-    title: "Meeting Notes Summarizer",
-    description: "Turn raw notes or transcripts into clear summaries.",
-    href: "/notes",
-    icon: FileText,
-  },
-  {
-    title: "AI Task Planner",
-    description: "Break down goals into actionable, prioritized tasks.",
-    href: "/tasks",
-    icon: ListChecks,
-  },
-  {
-    title: "AI Research Assistant",
-    description: "Get a structured briefing on any topic.",
-    href: "/research",
-    icon: Search,
-  },
-  {
-    title: "AI Chatbot",
-    description: "Ask anything — a general-purpose work assistant.",
-    href: "/chat",
-    icon: MessageSquare,
-  },
-] as const;
+const features = [
+  { icon: Sparkles, title: "AI-generated quizzes", desc: "Type any topic — get a fresh quiz tailored to your difficulty." },
+  { icon: MessageSquare, title: "AI tutor chat", desc: "Ask follow-up questions and have concepts explained on demand." },
+  { icon: Flame, title: "Streaks & badges", desc: "Build daily habits and unlock achievements as you grow." },
+  { icon: Trophy, title: "Leaderboard", desc: "See where you rank against other learners." },
+  { icon: BarChart3, title: "Analytics", desc: "Spot weak topics, track accuracy, and improve over time." },
+  { icon: ShieldCheck, title: "Responsible AI", desc: "Outputs are clearly labeled and always reviewable." },
+];
 
-function Dashboard() {
+function Landing() {
   return (
-    <div>
-      <PageHeader
-        icon={<LayoutDashboard className="h-5 w-5" />}
-        title="Welcome back"
-        description="Choose a tool to get started."
-      />
-      <div className="space-y-6 p-6">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {tools.map((t) => (
-            <Link
-              key={t.href}
-              to={t.href}
-              className="group rounded-xl border bg-card p-5 shadow-sm transition hover:border-primary/40 hover:shadow-md"
-            >
-              <div className="mb-4 grid h-10 w-10 place-items-center rounded-lg bg-accent text-accent-foreground">
-                <t.icon className="h-5 w-5" />
-              </div>
-              <h3 className="font-semibold tracking-tight">{t.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t.description}</p>
-              <div className="mt-4 flex items-center gap-1 text-sm font-medium text-primary opacity-0 transition group-hover:opacity-100">
-                Open <ArrowRight className="h-4 w-4" />
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <div className="flex items-start gap-3 rounded-xl border bg-accent/30 p-4 text-sm">
-          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-          <div>
-            <div className="font-medium">Responsible AI use</div>
-            <p className="text-muted-foreground">
-              Outputs are AI-generated and may be inaccurate or biased. Always review,
-              fact-check, and edit before sharing. Avoid entering confidential information
-              you wouldn't share with a third-party service.
-            </p>
+    <div className="min-h-screen bg-background">
+      <header className="border-b">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+          <Link to="/" className="flex items-center gap-2 font-semibold">
+            <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
+              <Brain className="h-4 w-4" />
+            </div>
+            QuizAI
+          </Link>
+          <div className="flex gap-2">
+            <Link to="/auth"><Button variant="ghost">Sign in</Button></Link>
+            <Link to="/auth"><Button>Get started</Button></Link>
           </div>
         </div>
-      </div>
+      </header>
+
+      <section className="mx-auto max-w-6xl px-4 py-20 text-center">
+        <div className="mx-auto inline-flex items-center gap-2 rounded-full border bg-accent/40 px-3 py-1 text-xs font-medium">
+          <Sparkles className="h-3 w-3" /> Powered by Lovable AI
+        </div>
+        <h1 className="mx-auto mt-6 max-w-3xl text-5xl font-bold tracking-tight sm:text-6xl">
+          Master any subject with <span className="text-primary">AI-powered quizzes</span>
+        </h1>
+        <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
+          Generate practice quizzes on any topic, learn with an AI tutor, build streaks, earn badges, and track your progress.
+        </p>
+        <div className="mt-8 flex justify-center gap-3">
+          <Link to="/auth"><Button size="lg">Start learning free</Button></Link>
+          <Link to="/auth"><Button size="lg" variant="outline">Sign in</Button></Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pb-24">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => (
+            <div key={f.title} className="rounded-xl border bg-card p-6 shadow-sm">
+              <div className="mb-4 grid h-10 w-10 place-items-center rounded-lg bg-accent text-accent-foreground">
+                <f.icon className="h-5 w-5" />
+              </div>
+              <h3 className="font-semibold">{f.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className="border-t py-8 text-center text-xs text-muted-foreground">
+        AI-generated content may be inaccurate. Always verify important answers.
+      </footer>
     </div>
   );
 }
